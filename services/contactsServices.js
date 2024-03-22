@@ -7,7 +7,7 @@ export async function listContacts() {
 }
 
 export async function getContactById(contactId) {
-  const data = (await getAllContacts()).find(({ id }) => id === contactId);
+  const data = (await helper.getAllContacts()).find(({ id }) => id === contactId);
   return data || null;
 }
 
