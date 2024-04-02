@@ -53,3 +53,17 @@ export const updateContact = async (req, res, next) => {
     next(error);
   }
 };
+export const updateStatusContact = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { favorite } = req.body;
+    const updateFavorite = await contactsService.updateStatusContact(
+      id,
+      favorite
+    );
+    if (!updateFavorite) throw HttpError(404, "message not found");
+    res.status(200).json(updateFavorite);
+  } catch (error) {
+    next(error);
+  }
+};
