@@ -5,15 +5,11 @@ export const getAllContacts = async (req, res, next) => {
   try {
     const { page = 1, limit = 10, favorite } = req.query;
     const { _id: owner } = req.user;
-    console.log(owner);
     const skip = (page - 1) * limit;
-    const data = await contactsService.listContacts(
-      { owner, favorite },
-      { skip, limit }
-    );
+    const filter = favorite !== undefined ? { owner, favorite } : { owner };
+    const data = await contactsService.listContacts(filter, { skip, limit });
     const total = await contactsService.countContacts({ owner });
     const perpage = data.length;
-
     res.json({ data, total, perpage });
   } catch (error) {
     next(error);

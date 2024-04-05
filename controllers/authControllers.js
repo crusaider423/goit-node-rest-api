@@ -68,7 +68,7 @@ export const updateSubscription = async (req, res, next) => {
     const { _id } = req.user;
     const { subscription } = req.body;
     const chengeSubscription = await services.update({ _id }, { subscription });
-    res.json(chengeSubscription);
+    res.json({ subscription: chengeSubscription.subscription });
   } catch (error) {
     next(error);
   }
