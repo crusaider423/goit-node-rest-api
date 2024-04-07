@@ -1,9 +1,11 @@
 import express from "express";
 import isValidBody from "../middlewares/isValidBody.js";
 import isValidId from "../middlewares/isValidId.js";
+import authenticate from "../middlewares/authenticate.js";
 import {
   createContactSchema,
   updateContactSchema,
+  updateFavoriteSchema
 } from "../schemas/contactsSchemas.js";
 import {
   getAllContacts,
@@ -16,14 +18,11 @@ import {
 
 const contactsRouter = express.Router();
 
+contactsRouter.use(authenticate);
 contactsRouter.get("/", getAllContacts);
-
 contactsRouter.get("/:id", isValidId, getOneContact);
-
 contactsRouter.delete("/:id", isValidId, deleteContact);
-
 contactsRouter.post("/", isValidBody(createContactSchema), createContact);
-
 contactsRouter.put(
   "/:id",
   isValidId,
@@ -33,7 +32,7 @@ contactsRouter.put(
 contactsRouter.patch(
   "/:id/favorite",
   isValidId,
-  isValidBody(updateContactSchema),
+  isValidBody(updateFavoriteSchema),
   updateStatusContact
 );
 
