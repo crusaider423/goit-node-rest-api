@@ -5,6 +5,7 @@ import authenticate from "../middlewares/authenticate.js";
 import {
   createContactSchema,
   updateContactSchema,
+  updateFavoriteSchema
 } from "../schemas/contactsSchemas.js";
 import {
   getAllContacts,
@@ -31,7 +32,7 @@ contactsRouter.put(
 contactsRouter.patch(
   "/:id/favorite",
   isValidId,
-  isValidBody(updateContactSchema),
+  isValidBody(updateFavoriteSchema),
   updateStatusContact
 );
 

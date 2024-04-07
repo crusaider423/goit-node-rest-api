@@ -10,7 +10,9 @@ const authenticate = async (req, res, next) => {
     if (bearer !== "Bearer" || !token) throw HttpError(401, "Not authorized");
     const verifyToken = jsw.verify(token, JWT_SECRET);
     const findUser = await findOne({ _id: verifyToken.id });
-    if (!findUser || !findUser.token) throw HttpError(401, "Not authorized ");
+    if (!findUser) throw HttpError(401, "Not authorized ");
+    if (!findUser.token) throw HttpError(401, "Not authorized ");
+
     req.user = findUser;
     next();
   } catch (error) {
