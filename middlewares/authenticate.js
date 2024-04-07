@@ -12,7 +12,6 @@ const authenticate = async (req, res, next) => {
     const findUser = await findOne({ _id: verifyToken.id });
     if (!findUser) throw HttpError(401, "Not authorized ");
     if (!findUser.token) throw HttpError(401, "Not authorized ");
-
     req.user = findUser;
     next();
   } catch (error) {
