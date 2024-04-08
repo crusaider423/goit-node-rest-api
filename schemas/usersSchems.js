@@ -9,3 +9,4 @@ export const updateSchema = Joi.object({
     .valid(...subscriptionList)
     .required(),
 });
+
