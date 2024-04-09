@@ -92,8 +92,9 @@ export const updateAvatar = async (req, res, next) => {
     const image = await Jimp.read(oldPath);
     image.resize(300, 300).writeAsync(newPath);
     await fs.unlink(oldPath);
-    const avatarURL = path.join('avatars',filename)
+    const avatarURL = `/avatars/${filename}`
     await services.update({ _id }, { avatarURL });
+    console.log(avatarURL);
     res.json({ avatarURL });
   } catch (error) {
     next(error);
