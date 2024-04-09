@@ -4,9 +4,6 @@ import HttpError from "../helpers/HttpError.js";
 
 const destination = path.resolve("tmp/");
 
-// export const upload = multer({ dest: 'tmp/' })
-// const storage = multer.memoryStorage()
-
 const storage = multer.diskStorage({
   destination,
   filename: (req, file, cb) => {

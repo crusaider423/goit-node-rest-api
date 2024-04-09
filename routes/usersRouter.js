@@ -19,7 +19,8 @@ usersRouter.patch(
 
 usersRouter.patch(
   "/avatars",
-  upload.single("avatar"),authenticate,
+  authenticate,
+  upload.single("avatar"),
   controllers.updateAvatar
 );
 

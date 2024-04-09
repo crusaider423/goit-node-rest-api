@@ -84,15 +84,17 @@ export const updateSubscription = async (req, res, next) => {
 };
 export const updateAvatar = async (req, res, next) => {
   try {
-    const {_id}=req.user
+    if (!req.file) throw HttpError(400, "file do not passed");
+    const { _id } = req.user;
     const avatarsPath = path.resolve("public", "avatars");
     const { path: oldPath, filename } = req.file;
     const newPath = path.join(avatarsPath, filename);
     const image = await Jimp.read(oldPath);
     image.resize(300, 300).writeAsync(newPath);
     await fs.unlink(oldPath);
-    await services.update({_id},{avatarURL:newPath})
-    res.json({ avatarURL: newPath });
+    const avatarURL = path.join('avatars',filename)
+    await services.update({ _id }, { avatarURL });
+    res.json({ avatarURL });
   } catch (error) {
     next(error);
   }
