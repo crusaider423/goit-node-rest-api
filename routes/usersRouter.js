@@ -4,6 +4,7 @@ import { authSchema, updateSchema } from "../schemas/usersSchems.js";
 import * as controllers from "../controllers/authControllers.js";
 import authenticate from "../middlewares/authenticate.js";
 const usersRouter = Router();
+import upload from "../middlewares/upload.js";
 
 usersRouter.post("/register", validateBody(authSchema), controllers.register);
 usersRouter.post("/login", validateBody(authSchema), controllers.login);
@@ -14,6 +15,13 @@ usersRouter.patch(
   authenticate,
   validateBody(updateSchema),
   controllers.updateSubscription
+);
+
+usersRouter.patch(
+  "/avatars",
+  authenticate,
+  upload.single("avatar"),
+  controllers.updateAvatar
 );
 
 export default usersRouter;

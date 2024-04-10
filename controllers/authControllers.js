@@ -2,7 +2,11 @@ import * as services from "../services/authServices.js";
 import bcrypt from "bcrypt";
 import HttpError from "../helpers/HttpError.js";
 import jwt from "jsonwebtoken";
+import gravatar from "gravatar";
 import { JWT_SECRET } from "../helpers/env.js";
+import fs from "fs/promises";
+import path from "path";
+import Jimp from "jimp";
 
 export const register = async (req, res, next) => {
   try {
@@ -10,7 +14,12 @@ export const register = async (req, res, next) => {
     const hashPassword = await bcrypt.hash(password, 10);
     const findUser = await services.findOne({ email });
     if (findUser) throw HttpError(409, "Email in use");
-    const newUser = await services.register({ email, password: hashPassword });
+    const url = gravatar.url(email);
+    const newUser = await services.register({
+      email,
+      password: hashPassword,
+      avatarURL: url,
+    });
     res.status(201).json({
       user: {
         email,
@@ -69,6 +78,24 @@ export const updateSubscription = async (req, res, next) => {
     const { subscription } = req.body;
     const chengeSubscription = await services.update({ _id }, { subscription });
     res.json({ subscription: chengeSubscription.subscription });
+  } catch (error) {
+    next(error);
+  }
+};
+export const updateAvatar = async (req, res, next) => {
+  try {
+    if (!req.file) throw HttpError(400, "file do not passed");
+    const { _id } = req.user;
+    const avatarsPath = path.resolve("public", "avatars");
+    const { path: oldPath, filename } = req.file;
+    const newPath = path.join(avatarsPath, filename);
+    const image = await Jimp.read(oldPath);
+    image.resize(300, 300).writeAsync(newPath);
+    await fs.unlink(oldPath);
+    const avatarURL = `/avatars/${filename}`
+    await services.update({ _id }, { avatarURL });
+    console.log(avatarURL);
+    res.json({ avatarURL });
   } catch (error) {
     next(error);
   }
