@@ -1,4 +1,4 @@
-export const decorator = (controller) => {
+const decorator = (controller) => {
   const func = async (req, res, next) => {
     try {
       await controller(req, res, next);
@@ -8,3 +8,4 @@ export const decorator = (controller) => {
   };
   return func;
 };
+export default decorator;

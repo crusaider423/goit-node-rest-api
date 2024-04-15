@@ -10,3 +10,6 @@ export const updateSchema = Joi.object({
     .required(),
 });
 
+export const emailSchema = Joi.object({
+  email: Joi.string().required(),
+});
